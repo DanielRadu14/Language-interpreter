@@ -1,0 +1,61 @@
+RADU DANIEL 325CB - Tema1 PP
+
+				--ClassState--
+
+	Am definit ClassState ca alias pentru Map ce ia drept cheie InstrType si valoare [[String]].In acest fel,
+pot retine mai multe functii care au aceeasi denumire, dar parametri diferiti.
+
+	-initEmptyClass va intoarce constructorul empty al Map
+	-insertIntoClass va adauga valoarea data la cheia Func sau Var, cu concatenare
+	-getValues va intoarce variabilele sau functiile continute de Map
+
+
+			 	 --Parser--
+
+	Am definit program ca fiind o lista de elemente de tipul (clasa, nume_clasa, parinte_clasa), unde clasa
+este de tipul ClassState, iar numele clasei si numele parintelui clasei vor fi String.
+	La initializarea unui program, clasa "Global" va fi creata in mod automat, cu parintele "Global"
+
+	-getVars va parcurge lista continuta de program, va extrage fiecare clasa pe rand si va apela
+functia definita in ClassState.hs pentru variabile.
+
+	-getClasses va parcurge lista continuta de program si va apela functia care intoarce numele clasei din constructia
+(clasa, nume_clasa, parinte_clasa) ce va fi concatenata recursiv la lista [String] ce va fi afisata la final
+
+	-getParentClass va parcurge lista continuta de program si va apela functia care intoarce numele parintelui clasei
+din constructia (clasa, nume_clasa, parinte_clasa) cand clasa ceruta va fi gasita, sau lista vida daca aceasta nu este gasita
+in program
+
+	-getFuncsForClass va parcurge lista continuta de program si va apela functia definita in ClassState(getValues pentru Func)
+cand clasa ceruta este gasita, sau lista vida, daca aceasta nu este gasita.
+
+	Am definit instruction ca fiind o lista de [String].
+	Functia de parsare se va folosi de functia lines din Prelude, care va imparti String-ul initial in [String], fiecare element
+reprezentand cate o linie si de functia word, care va parsa fiecare linie, impartind-o intr-o lista [String] de cuvinte, dupa
+delimitatoarele "(,),=,',',' ' . Am folosit filter pentru eliminarea liniilor si spatiilor goale. Fiecare instructiune va reprezenta
+cate o linie, ca o lista de [String] (care contine cuvintele).
+
+	Am definit functiile addVar si addFunc care vor adauga variabile, respectiv functii in programul curent. Acestea cauta clasa
+in care trebuie adaugat(in cazul variabilelor, mereu "Global"), va modifica ClassState-ul din constructia (clasa, nume_clasa, parinte_clasa)
+si va concatena constructia noua la restul listei din Program si acumulatorul care contine elementele prin care am iterat pana in momentul
+in care am gasit clasa in care trebuie adaugat.
+
+	Am definit functiile auxiliare getClassName, getExtends, getVarName, getVarType, getFuncClass care prelucreaza lista [String] continuta
+in Instruction pentru o mai buna lizibilitate a codului in functia "interpret".
+	Am definit functia createFunc care prelucreaza lista de [String] continuta in Instruction si creeaza intocmai lista [String] ce va fi
+adaugata in ClassState prin comanda addFunc.
+	Am definit functia verificaFunc care verifica exista claselor continute de definitia functiei pentru a valida crearea functiei noi.
+
+
+	Functia interpret : 
+		Daca instructiunea are ca prim cuvant "newvar", adaug noua variabila in program, daca tipul acesteia este valid(daca exista
+clasa respectiva in program).
+		Daca instructiunea contine cuvantul "class", voi adauga clasa noua in program, daca aceasta nu exista deja.Daca este specificat
+cuvantul "extends", o adaug cu clasa parinte data, daca aceasta exista, sau "Global", daca nu este specificat "extends"
+		Daca functia verificaFunc intoarce True, inseamna ca am primit un prototip de functie care are toate argumentele valide (tipul
+ei, dar si tipul parametrilor sunt deja definite in program) si o pot adauga in program.
+		Daca nu este indeplinita niciuna din conditiile de mai sus, programul ramane neschimbat.
+
+	Functia infer trateaza cazul in care primeste o variabila, verifica daca aceasta exista in program prin functia verificaVar si intoarce
+tipul acesteia.
+	
